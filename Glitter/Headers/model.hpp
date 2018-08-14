@@ -12,6 +12,7 @@ public:
 	
 	void Render()
 	{
+        LoadTexture();
 		mShader.Use();
 		glBindVertexArray(mModelVao);
 		glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
@@ -20,11 +21,25 @@ public:
 
     void RenderBasic()
     {
+        LoadTexture();
         mShader.Use();
         glBindVertexArray(mModelVao);
         glDrawArrays(GL_TRIANGLES, 0, 3);
     }
 private:
+    void LoadTexture()
+    {
+        int width, height, nrChannels;
+        unsigned char* data = stbi_load("./../Glitter/Resources/container.jpg", &width, &height, &nrChannels, 0);
+
+        unsigned int texture;
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        stbi_image_free(data);
+    }
+
     int Load()
     {
         // generate our buffers
@@ -46,11 +61,14 @@ private:
 
         // describe the layout of our vertex data to the shader program
         // position attribute
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
         // color attribute
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3* sizeof(float)));
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3* sizeof(float)));
         glEnableVertexAttribArray(1);
+        // texture coords
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+        glEnableVertexAttribArray(2);
 
         // unbind the vertexArrayObject
         glBindVertexArray(0); 
@@ -62,10 +80,11 @@ private:
 	const Shader& mShader;
 
     std::vector<float> mVertices = {
-        // positions         // colors
-        0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
-        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
-        0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top 
+        // positions          // colors           // texture coords
+        0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+        0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
     }; 
 	std::vector<unsigned int> mIndices = {
 		0, 1, 3, // first triangle

@@ -59,7 +59,7 @@ int main()
         glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        square.RenderBasic();
+        square.Render();
 
         // Flip Buffers and Draw
         glfwSwapBuffers(mWindow);
