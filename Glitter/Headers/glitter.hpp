@@ -17,6 +17,34 @@
 //     #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+// my headers
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <iostream>
+
+// utils
+std::string LoadFileAsString(const std::string location)
+{
+    auto basePath = "./../Glitter/";
+
+    std::ifstream file;
+    file.open(basePath + location);
+    
+    if (!file.good())
+    {
+        std::cout << "ERROR::FILESYSTEM::COULD_NOT_LOAD_FILE : " << location << std::endl;
+        return "ERROR: SEE ABOVE";
+    }
+
+    std::stringstream fileContents;
+    fileContents << file.rdbuf();
+
+    auto result = fileContents.str();
+
+    return result;
+}
+
 // Define Some Constants
 const int mWidth = 1280;
 const int mHeight = 800;
