@@ -11,6 +11,21 @@
 #include <cstdio>
 #include <cstdlib>
 
+Material* GenerateMaterial()
+{
+    auto vertexShaderSource2 = LoadFileAsString("Resources/basic.vert");
+    auto fragmentShaderSource2 = LoadFileAsString("Resources/basic.frag");
+    Shader* basicShader = new Shader(vertexShaderSource2, fragmentShaderSource2);
+
+    Texture* container = new Texture("container.jpg");
+    Texture* face = new Texture("awesomeface.png", true);
+    
+    auto material = new Material(basicShader, container);
+    material->AddTexture(face);
+
+    return material;
+}
+
 int main()
 {
     // Load GLFW and Create a Window
@@ -33,11 +48,9 @@ int main()
     gladLoadGL();
     fprintf(stderr, "OpenGL %s\n", glGetString(GL_VERSION));
 
-    auto vertexShaderSource2 = LoadFileAsString("Resources/basic.vert");
-    auto fragmentShaderSource2 = LoadFileAsString("Resources/basic.frag");
 
-    Shader basicShader(vertexShaderSource2, fragmentShaderSource2);
-    Model square(basicShader);
+    auto material = GenerateMaterial();
+    Model square(material);
 
     while (glfwWindowShouldClose(mWindow) == false)
     {
