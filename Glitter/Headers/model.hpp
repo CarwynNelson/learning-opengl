@@ -17,6 +17,13 @@ public:
 		glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}
+
+    void RenderBasic()
+    {
+        mShader.Use();
+        glBindVertexArray(mModelVao);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+    }
 private:
     int Load()
     {
@@ -62,6 +69,6 @@ private:
     }; 
 	std::vector<unsigned int> mIndices = {
 		0, 1, 3, // first triangle
-		//1, 2, 3 // second triangle
+        1, 2, 3 // second triangle
 	};
 };
