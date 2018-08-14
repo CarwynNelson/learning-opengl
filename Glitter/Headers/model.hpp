@@ -12,8 +12,16 @@ public:
 	
 	void Render()
 	{
-        LoadTexture();
+        int texture1 = LoadTexture("container.jpg", GL_RGB);
+        int texture2 = LoadTexture("awesomeface.png", GL_RGBA, true);
 		mShader.Use();
+        mShader.SetInt("texture2", 1);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture1);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture2);
+        
 		glBindVertexArray(mModelVao);
 		glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
@@ -21,23 +29,28 @@ public:
 
     void RenderBasic()
     {
-        LoadTexture();
+        //LoadTexture("container.jpg");
         mShader.Use();
         glBindVertexArray(mModelVao);
         glDrawArrays(GL_TRIANGLES, 0, 3);
     }
 private:
-    void LoadTexture()
+    int LoadTexture(const std::string& imageName, GLenum format, bool flip = false)
     {
+        const std::string basePath = "./../Glitter/Resources/";
         int width, height, nrChannels;
-        unsigned char* data = stbi_load("./../Glitter/Resources/container.jpg", &width, &height, &nrChannels, 0);
+        stbi_set_flip_vertically_on_load(flip);
 
-        unsigned int texture;
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        unsigned int textureId;
+        glGenTextures(1, &textureId);
+        glBindTexture(GL_TEXTURE_2D, textureId);
+
+        unsigned char* data = stbi_load((basePath + imageName).c_str(), &width, &height, &nrChannels, 0);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
         stbi_image_free(data);
+
+        return textureId;
     }
 
     int Load()
