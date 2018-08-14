@@ -8,23 +8,23 @@ public:
 	Model(const Shader& shader) : mShader(shader)
 	{
 		mModelVao = Load();
+        mTexture1 = LoadTexture("container.jpg", GL_RGB);
+        mTexture2 = LoadTexture("awesomeface.png", GL_RGBA, true);
 	}
 	
 	void Render()
 	{
-        int texture1 = LoadTexture("container.jpg", GL_RGB);
-        int texture2 = LoadTexture("awesomeface.png", GL_RGBA, true);
-		mShader.Use();
+        mShader.Use();
         mShader.SetInt("texture2", 1);
 
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture1);
+        glBindTexture(GL_TEXTURE_2D, mTexture1);
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texture2);
+        glBindTexture(GL_TEXTURE_2D, mTexture2);
         
-		glBindVertexArray(mModelVao);
-		glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
+        glBindVertexArray(mModelVao);
+        glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
 	}
 
     void RenderBasic()
@@ -90,6 +90,7 @@ private:
     }
 
 	int mModelVao;
+    int mTexture1, mTexture2;
 	const Shader& mShader;
 
     std::vector<float> mVertices = {
