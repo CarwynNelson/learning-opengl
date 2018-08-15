@@ -48,7 +48,9 @@ std::string LoadFileAsString(const std::string location)
 }
 
 // Define Some Constants
-const int mWidth = 1280;
-const int mHeight = 800;
+//const int mWidth = 1280;
+//const int mHeight = 800;
+const int mWidth = 1024;
+const int mHeight = 768;
 
 #endif //~ Glitter Header

@@ -10,16 +10,13 @@ public:
 		mModelVao = Load();
         mTexture1 = LoadTexture("container.jpg", GL_RGB);
         mTexture2 = LoadTexture("awesomeface.png", GL_RGBA, true);
-
-        mTrans = glm::rotate(mTrans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-        mTrans = glm::scale(mTrans, glm::vec3(0.5, 0.5, 0.5));
 	}
 	
-	void Render()
+	void Render(glm::mat4 transform)
 	{
         mShader.Use();
         mShader.SetInt("texture2", 1);
-        mShader.SetMat4("transform", mTrans);
+        mShader.SetMat4("transform", transform);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, mTexture1);
@@ -96,7 +93,6 @@ private:
 	int mModelVao;
     int mTexture1, mTexture2;
 	const Shader& mShader;
-    glm::mat4 mTrans = glm::mat4(1.0f);
 
     std::vector<float> mVertices = {
         // positions          // colors           // texture coords

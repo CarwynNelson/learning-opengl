@@ -59,7 +59,16 @@ int main()
         glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        square.Render();
+		auto delta = (float)glfwGetTime();
+        glm::mat4 trans1(1.0f);
+        trans1 = glm::translate(trans1, glm::vec3(0.5, -0.5f, 0.0f));
+        trans1 = glm::rotate(trans1, delta, glm::vec3(0.0f, 0.0f, 1.0f));
+
+		glm::mat4 trans2(1.0f);
+		trans2 = glm::translate(trans2, glm::vec3(-0.1, 0.2, 0.0));
+
+        square.Render(trans1);
+		square.Render(trans2);
 
         // Flip Buffers and Draw
         glfwSwapBuffers(mWindow);
