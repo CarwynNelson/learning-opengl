@@ -10,6 +10,8 @@
 #include <btBulletDynamicsCommon.h>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/string_cast.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 // Reference: https://github.com/nothings/stb/blob/master/stb_image.h#L4

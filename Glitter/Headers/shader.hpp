@@ -39,6 +39,12 @@ public:
     { 
         glUniform1f(glGetUniformLocation(mProgramId, name.c_str()), value); 
     } 
+
+    void SetMat4(const std::string& name, glm::mat4 matrix) const
+    {
+        auto uniformLocation = glGetUniformLocation(mProgramId, name.c_str());
+        glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(matrix));
+    }
 private:
     int Compile(GLenum shaderType, const std::string& shaderSource)
     {
