@@ -65,7 +65,8 @@ int main()
         trans1 = glm::rotate(trans1, delta, glm::vec3(0.0f, 0.0f, 1.0f));
 
 		glm::mat4 trans2(1.0f);
-		trans2 = glm::translate(trans2, glm::vec3(-0.1, 0.2, 0.0));
+		trans2 = glm::translate(trans2, glm::vec3(-0.5, 0.5, 0.0));
+		trans2 = glm::rotate(trans2, sin(delta) * 2, glm::vec3(0.0f, 0.0f, 1.0f));
 
         square.Render(trans1);
 		square.Render(trans2);
