@@ -30,7 +30,7 @@ public:
 private:
     int LoadTexture(const std::string& imageName, GLenum format, bool flip = false)
     {
-        const std::string basePath = "./../Glitter/Resources/";
+        const std::string basePath = "./../../Glitter/Resources/";
         int width, height, nrChannels;
         stbi_set_flip_vertically_on_load(flip);
 

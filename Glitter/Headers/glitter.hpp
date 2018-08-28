@@ -28,7 +28,7 @@
 // utils
 std::string LoadFileAsString(const std::string location)
 {
-    auto basePath = "./../Glitter/";
+    auto basePath = "./../../Glitter/";
 
     std::ifstream file;
     file.open(basePath + location);
