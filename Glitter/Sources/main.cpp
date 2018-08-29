@@ -35,12 +35,13 @@ int main()
         gameWindow.SetCursorCallback(mouse_callback);
         gameWindow.SetScrollCallback(scroll_callback);
 
-        fprintf(stderr, "OpenGL %s\n", glGetString(GL_VERSION));
 
-        // I'm not sure this should be a part of Window
-        // Since this isn't strictly to do with the window itself
-        // but rather the rendering of the graphics - which are then
-        // later "sent to the window" if you will
+        // here is an opengl / "graphics api" context
+        // and here are the settings we are going to set on it
+        // or maybe more of a gl utility that inits opengl
+        // and in the future we could pass it a GLSettings struct type thing
+        gladLoadGL();
+        fprintf(stderr, "OpenGL %s\n", glGetString(GL_VERSION));
         glEnable(GL_DEPTH_TEST);
 
         auto vertexShaderSource2 = LoadFileAsString("Resources/basic.vert");

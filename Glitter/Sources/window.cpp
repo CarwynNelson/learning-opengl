@@ -11,8 +11,8 @@ Window::Window(int width, int height, const std::string &title)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
+    glfwWindowHint(GLFW_RESIZABLE, false);
 
     window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
 
@@ -26,7 +26,6 @@ Window::Window(int width, int height, const std::string &title)
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glfwMakeContextCurrent(window);
-    gladLoadGL(); // is this the right place for this to exist?
 }
 
 Window::~Window()
