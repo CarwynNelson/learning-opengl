@@ -46,14 +46,16 @@ struct Vao
 class GameObject
 {
 public:
-    GameObject(const Shader &shader, const Vao& vao, glm::mat4 projection);
+    GameObject(Shader* shader, Vao* vao, glm::mat4 projection);
 
     void Translate(glm::vec3 translation);
     void Rotate(float angle, glm::vec3 axis);
     void Render(glm::mat4 viewMatrix);
-private:
-    const Shader& shader;
-    const Vao& vao;
+protected:
+    explicit GameObject(glm::mat4 projection);
+
+    Shader* shader;
+    Vao* vao;
     glm::mat4 model;
     glm::mat4 projection;
     // textures: todo

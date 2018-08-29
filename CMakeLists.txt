@@ -59,7 +59,7 @@ add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS}
                                ${PROJECT_SHADERS} ${PROJECT_CONFIGS}
                                ${VENDORS_SOURCES} Glitter/Headers/camera.hpp
                                 Glitter/Headers/window.hpp Glitter/Sources/window.cpp
-                                Glitter/Headers/game_object.hpp Glitter/Sources/game_object.cpp)
+                                Glitter/Headers/game_object.hpp Glitter/Sources/game_object.cpp Glitter/Headers/GameObjects/cube.hpp)
 target_link_libraries(${PROJECT_NAME} assimp glfw
                       ${GLFW_LIBRARIES} ${GLAD_LIBRARIES}
                       BulletDynamics BulletCollision LinearMath)

@@ -1,7 +1,16 @@
+
+#include <game_object.hpp>
+
 #include "game_object.hpp"
 
-GameObject::GameObject(const Shader &shader, const Vao& vao, glm::mat4 projection)
+GameObject::GameObject(Shader* shader, Vao* vao, glm::mat4 projection)
         : shader(shader), vao(vao), model(glm::mat4(1.0f)), projection(projection)
+{
+
+}
+
+GameObject::GameObject(glm::mat4 projection)
+        : projection(projection), model(glm::mat4(1.0f))
 {
 
 }
@@ -18,13 +27,13 @@ void GameObject::Rotate(float angleInRadians, glm::vec3 axis)
 
 void GameObject::Render(glm::mat4 viewMatrix)
 {
-    shader.Use();
-    shader.SetMat4("view", viewMatrix);
-    shader.SetMat4("model", model);
-    shader.SetMat4("projection", projection);
+    shader->Use();
+    shader->SetMat4("view", viewMatrix);
+    shader->SetMat4("model", model);
+    shader->SetMat4("projection", projection);
     // activating the texture will need to happen here
 
-    glBindVertexArray(vao.id);
+    glBindVertexArray(vao->id);
     glDrawArrays(GL_TRIANGLES, 0, 36); // magic-number 36
     glBindVertexArray(0);
 
