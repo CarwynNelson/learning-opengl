@@ -1,9 +1,13 @@
 // Local Headers
+
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 #include "glitter.hpp"
+
 #include "shader.hpp"
-#include "model.hpp"
 #include "camera.hpp"
 #include "window.hpp"
+#include "game_object.hpp"
 
 // System Headers
 #include <glad/glad.h>
@@ -24,6 +28,51 @@ bool firstMouse = true;
 // * replacement for glfwGetTime
 // * some better "Model" abstraction
 
+std::vector<float> cubeVertices = {
+        // positions          texture coords
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+        0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+};
+
 static void processInput(Window& gameWindow);
 static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -35,7 +84,6 @@ int main()
         gameWindow.SetCursorCallback(mouse_callback);
         gameWindow.SetScrollCallback(scroll_callback);
 
-
         // here is an opengl / "graphics api" context
         // and here are the settings we are going to set on it
         // or maybe more of a gl utility that inits opengl
@@ -44,12 +92,10 @@ int main()
         fprintf(stderr, "OpenGL %s\n", glGetString(GL_VERSION));
         glEnable(GL_DEPTH_TEST);
 
-        auto vertexShaderSource2 = LoadFileAsString("Resources/basic.vert");
-        auto fragmentShaderSource2 = LoadFileAsString("Resources/basic.frag");
+        glm::mat4 projection(1.0f);
+        projection = glm::perspective(glm::radians(camera.Zoom), (float)mWidth / (float)mHeight, 0.1f, 100.0f);
 
-        Shader basicShader(vertexShaderSource2, fragmentShaderSource2);
-        Model square(basicShader);
-
+        // this is essentially our "Scene" class
         glm::vec3 cubePositions[] = {
                 glm::vec3( 0.0f,  0.0f,  0.0f),
                 glm::vec3( 2.0f,  5.0f, -15.0f),
@@ -63,10 +109,11 @@ int main()
                 glm::vec3(-1.3f,  1.0f, -1.5f)
         };
 
-        glm::mat4 projection(1.0f);
-        projection = glm::perspective(glm::radians(camera.Zoom), (float)mWidth / (float)mHeight, 0.1f, 100.0f);
-        basicShader.Use();
-        basicShader.SetMat4("projection", projection);
+        auto vertexShaderSource2 = LoadFileAsString("Resources/basic.vert");
+        auto fragmentShaderSource2 = LoadFileAsString("Resources/basic.frag");
+        Shader basicShader(vertexShaderSource2, fragmentShaderSource2);
+        Vao vertices(cubeVertices);
+        GameObject cube(basicShader, vertices, projection);
 
         while (gameWindow.IsOpen())
         {
@@ -75,20 +122,15 @@ int main()
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             glm::mat4 view = camera.GetViewMatrix();
-            basicShader.Use();
-            basicShader.SetMat4("view", view);
 
             for (auto i = 0; i < 10; i++) {
                 float angle = 20.0f * i;
                 if (i % 3 == 0)
                     angle = glfwGetTime() * 25.0f;
 
-                glm::mat4 model(1.0f);
-                model = glm::translate(model, cubePositions[i]);
-                model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-                basicShader.SetMat4("model", model);
-
-                square.Render();
+                cube.Translate(cubePositions[i]);
+                cube.Rotate(glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+                cube.Render(view);
             }
 
             gameWindow.SwapBuffers();
