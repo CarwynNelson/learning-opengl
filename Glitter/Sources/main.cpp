@@ -28,6 +28,8 @@ bool firstMouse = true;
 // * non-glfw input system
 // * replacement for glfwGetTime
 // * some better "Model" abstraction
+// to do next
+// * add texturing back
 
 static void processInput(Window& gameWindow);
 static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
