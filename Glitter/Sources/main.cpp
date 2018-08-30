@@ -6,7 +6,7 @@
 #include "camera.hpp"
 #include "window.hpp"
 #include "game_object.hpp"
-#include "GameObjects/cube.hpp"
+#include "Scenes/cube_scene.hpp"
 
 // System Headers
 #include <glad/glad.h>
@@ -51,21 +51,7 @@ int main()
         glm::mat4 projection(1.0f);
         projection = glm::perspective(glm::radians(camera.Zoom), (float)mWidth / (float)mHeight, 0.1f, 100.0f);
 
-        // this is essentially our "Scene" class
-        glm::vec3 cubePositions[] = {
-                glm::vec3( 0.0f,  0.0f,  0.0f),
-                glm::vec3( 2.0f,  5.0f, -15.0f),
-                glm::vec3(-1.5f, -2.2f, -2.5f),
-                glm::vec3(-3.8f, -2.0f, -12.3f),
-                glm::vec3( 2.4f, -0.4f, -3.5f),
-                glm::vec3(-1.7f,  3.0f, -7.5f),
-                glm::vec3( 1.3f, -2.0f, -2.5f),
-                glm::vec3( 1.5f,  2.0f, -2.5f),
-                glm::vec3( 1.5f,  0.2f, -1.5f),
-                glm::vec3(-1.3f,  1.0f, -1.5f)
-        };
-
-        Cube cube(projection);
+        CubeScene scene(projection);
 
         while (gameWindow.IsOpen())
         {
@@ -75,15 +61,7 @@ int main()
 
             glm::mat4 view = camera.GetViewMatrix();
 
-            for (auto i = 0; i < 10; i++) {
-                float angle = 20.0f * i;
-                if (i % 3 == 0)
-                    angle = glfwGetTime() * 25.0f;
-
-                cube.Translate(cubePositions[i]);
-                cube.Rotate(glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-                cube.Render(view);
-            }
+            scene.Render(view, glfwGetTime(), gameWindow.GetDeltaTime());
 
             gameWindow.SwapBuffers();
             processInput(gameWindow);
