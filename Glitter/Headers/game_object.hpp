@@ -2,6 +2,7 @@
 
 #include "glitter.hpp"
 #include "shader.hpp"
+#include <utility>
 
 struct Vao
 {
@@ -58,5 +59,5 @@ protected:
     Vao* vao;
     glm::mat4 model;
     glm::mat4 projection;
-    // textures: todo
+    std::vector<std::pair<std::string, int> > uniformToTexture;
 };

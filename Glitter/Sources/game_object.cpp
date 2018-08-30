@@ -1,4 +1,4 @@
-#include <game_object.hpp>
+#include "game_object.hpp"
 
 GameObject::GameObject(Shader* shader, Vao* vao, glm::mat4 projection)
         : shader(shader), vao(vao), model(glm::mat4(1.0f)), projection(projection)
@@ -28,7 +28,16 @@ void GameObject::Render(glm::mat4 viewMatrix)
     shader->SetMat4("view", viewMatrix);
     shader->SetMat4("model", model);
     shader->SetMat4("projection", projection);
-    // activating the texture will need to happen here
+
+    if(!uniformToTexture.empty())
+    {
+        for (int i = 0; i < uniformToTexture.size(); i++)
+        {
+            glActiveTexture(GL_TEXTURE0 + i);
+            glBindTexture(GL_TEXTURE_2D, uniformToTexture.at(i).second);
+            shader->SetInt(uniformToTexture.at(i).first, i);
+        }
+    }
 
     glBindVertexArray(vao->id);
     glDrawArrays(GL_TRIANGLES, 0, 36); // magic-number 36
