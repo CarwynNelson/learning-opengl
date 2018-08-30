@@ -1,7 +1,5 @@
 // Local Headers
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
 #include "glitter.hpp"
 
 #include "shader.hpp"

@@ -49,7 +49,7 @@ public:
     GameObject(Shader* shader, Vao* vao, glm::mat4 projection);
 
     void Translate(glm::vec3 translation);
-    void Rotate(float angle, glm::vec3 axis);
+    virtual void Rotate(float angle, glm::vec3 axis);
     void Render(glm::mat4 viewMatrix);
 protected:
     explicit GameObject(glm::mat4 projection);

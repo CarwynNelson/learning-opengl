@@ -1,7 +1,4 @@
-
 #include <game_object.hpp>
-
-#include "game_object.hpp"
 
 GameObject::GameObject(Shader* shader, Vao* vao, glm::mat4 projection)
         : shader(shader), vao(vao), model(glm::mat4(1.0f)), projection(projection)

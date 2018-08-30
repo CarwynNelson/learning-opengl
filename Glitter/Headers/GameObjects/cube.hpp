@@ -5,14 +5,8 @@
 class Cube : public GameObject
 {
 public:
-    Cube(glm::mat4 projection) : GameObject(projection)
-    {
-        auto vertexShaderSource2 = LoadFileAsString("Resources/basic.vert");
-        auto fragmentShaderSource2 = LoadFileAsString("Resources/basic.frag");
-
-        this->shader = new Shader(vertexShaderSource2, fragmentShaderSource2);
-        this->vao = new Vao(cubeVertices);
-    }
+    explicit Cube(glm::mat4 projection);
+    virtual void Render(glm::mat4 viewMatrix);
 private:
     std::vector<float> cubeVertices = {
             // positions          texture coords
@@ -58,4 +52,6 @@ private:
             -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
             -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
+    int texture1;
+    int texture2;
 };
